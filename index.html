@@ -6,88 +6,47 @@
 <title>Teste Vocacional | FJU Universitários</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
-  color: #fff;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#0f0f0f;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
 }
-
-.container {
-  width: 100%;
-  max-width: 420px;
-  background: #121212;
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 0 35px rgba(255,0,0,0.25);
-  text-align: center;
+.container{
+  width:100%;
+  max-width:420px;
+  background:#121212;
+  border-radius:18px;
+  padding:24px;
+  text-align:center;
+  box-shadow:0 0 30px rgba(255,0,0,.3);
 }
-
-.logo img {
-  max-width: 140px;
-  margin-bottom: 15px;
+.logo img{max-width:140px;margin-bottom:15px;}
+h1,h2{color:#ff2d2d;}
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:#ff2d2d;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:15px;
 }
-
-h1, h2 {
-  color: #ff2d2d;
+.opcao{
+  background:#1f1f1f;
+  margin-top:10px;
+  padding:12px;
+  border-radius:10px;
+  cursor:pointer;
 }
-
-p {
-  color: #ccc;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 10px;
-  background: #ff2d2d;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-}
-
-button.secondary {
-  background: #333;
-}
-
-.opcao {
-  background: #1f1f1f;
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 2px solid transparent;
-}
-
-.opcao:hover {
-  border-color: #ff2d2d;
-}
-
-.hidden {
-  display: none;
-}
-
-.progress {
-  height: 6px;
-  background: #333;
-  border-radius: 10px;
-  margin: 15px 0;
-}
-
-.progress-bar {
-  height: 6px;
-  background: #ff2d2d;
-  width: 0%;
-  border-radius: 10px;
-  transition: width 0.3s;
-}
+.hidden{display:none;}
 </style>
 </head>
 
@@ -95,57 +54,90 @@ button.secondary {
 
 <div class="container">
 
-<!-- INÍCIO -->
 <div id="inicio">
   <div class="logo">
     <img src="logo.png" alt="FJU Universitários">
   </div>
   <h1>Teste Vocacional</h1>
-  <p>Não é rótulo.<br>É direção para o seu futuro 🎓</p>
-  <button id="btnIniciar" type="button">Começar teste</button>
+  <p>Descubra cursos que combinam com você 🎓</p>
+  <button onclick="iniciarTeste()">Começar teste</button>
 </div>
 
-<!-- QUIZ -->
 <div id="quiz" class="hidden">
-  <div class="progress">
-    <div class="progress-bar" id="barra"></div>
-  </div>
   <h2 id="pergunta"></h2>
   <div id="opcoes"></div>
-  <button id="btnVoltar" class="secondary" type="button">Voltar</button>
 </div>
 
-<!-- RESULTADO -->
 <div id="resultado" class="hidden">
-  <h2>Cursos indicados para você:</h2>
+  <h2>Cursos indicados:</h2>
   <div id="listaCursos"></div>
-  <button type="button" onclick="location.reload()">Refazer teste</button>
+  <button onclick="location.reload()">Refazer teste</button>
 </div>
 
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-
 const perguntas = [
- {q:"O que mais te motiva?", a:[["Criar","Criativo"],["Ajudar pessoas","Social"],["Liderar","Gestao"]]},
- {q:"Você se sente melhor quando:", a:[["Inovando","Tecnologia"],["Organizando","Gestao"],["Comunicando","Social"]]},
- {q:"Qual atividade te atrai mais?", a:[["Arte","Criativo"],["Direito","Juridico"],["Cálculos","Tecnologia"]]},
- {q:"Você prefere:", a:[["Trabalhar em grupo","Social"],["Decidir","Gestao"],["Criar sozinho","Criativo"]]},
- {q:"O que você faria melhor?", a:[["Ensinar","Social"],["Programar","Tecnologia"],["Empreender","Gestao"]]},
- {q:"Matéria favorita:", a:[["Artes","Criativo"],["Matemática","Tecnologia"],["Português","Juridico"]]},
- {q:"Você se considera:", a:[["Criativo","Criativo"],["Justo","Juridico"],["Responsável","Gestao"]]},
- {q:"Resolve problemas com:", a:[["Lógica","Tecnologia"],["Diálogo","Social"],["Estratégia","Gestao"]]},
- {q:"Falar em público:", a:[["Gosto","Social"],["Consigo","Gestao"],["Evito","Tecnologia"]]},
- {q:"Ambiente ideal:", a:[["Estúdio","Criativo"],["Comunidade","Social"],["Empresa","Gestao"]]},
- {q:"Você se vê:", a:[["Criando","Criativo"],["Defendendo","Juridico"],["Programando","Tecnologia"]]},
- {q:"Seu ponto forte:", a:[["Empatia","Social"],["Organização","Gestao"],["Imaginação","Criativo"]]},
- {q:"Prefere:", a:[["Desafios","Tecnologia"],["Impacto social","Social"],["Resultados","Gestao"]]},
- {q:"Tecnologia para você é:", a:[["Essencial","Tecnologia"],["Útil","Gestao"],["Secundária","Social"]]},
- {q:"Maior satisfação:", a:[["Criar algo novo","Criativo"],["Ajudar pessoas","Social"],["Alcançar metas","Gestao"]]}
+ {q:"O que você mais gosta de fazer?",a:[["Criar","Criativo"],["Ajudar","Social"],["Organizar","Gestao"]]},
+ {q:"Prefere trabalhar:",a:[["Com pessoas","Social"],["Com números","Gestao"],["Com ideias","Criativo"]]},
+ {q:"Você se destaca em:",a:[["Comunicação","Social"],["Planejamento","Gestao"],["Imaginação","Criativo"]]},
+ {q:"Seu ambiente ideal é:",a:[["Comunidade","Social"],["Empresa","Gestao"],["Estúdio","Criativo"]]},
+ {q:"Você gosta mais de:",a:[["Ensinar","Social"],["Liderar","Gestao"],["Criar","Criativo"]]},
+ {q:"O que mais te motiva?",a:[["Impacto social","Social"],["Resultados","Gestao"],["Inovação","Criativo"]]},
+ {q:"Você prefere:",a:[["Grupo","Social"],["Decidir","Gestao"],["Criar sozinho","Criativo"]]},
+ {q:"Seu ponto forte:",a:[["Empatia","Social"],["Organização","Gestao"],["Criatividade","Criativo"]]},
+ {q:"Você se vê no futuro:",a:[["Ajudando pessoas","Social"],["Gerenciando","Gestao"],["Criando projetos","Criativo"]]},
+ {q:"O que te atrai mais?",a:[["Psicologia","Social"],["Administração","Gestao"],["Design","Criativo"]]},
+ {q:"Você resolve problemas com:",a:[["Diálogo","Social"],["Estratégia","Gestao"],["Ideias","Criativo"]]},
+ {q:"Trabalhar sob pressão:",a:[["Consigo","Gestao"],["Prefiro diálogo","Social"],["Depende","Criativo"]]},
+ {q:"Matéria favorita:",a:[["Português","Social"],["Matemática","Gestao"],["Artes","Criativo"]]},
+ {q:"Você prefere rotina ou novidade?",a:[["Rotina","Gestao"],["Novidade","Criativo"],["Pessoas","Social"]]},
+ {q:"Maior satisfação:",a:[["Ver alguém bem","Social"],["Bater metas","Gestao"],["Criar algo","Criativo"]]}
 ];
 
-const cursos = {
- Criativo:["Design","Publicidade","Arquitetura","Cinema","Moda"],
- Social:["Pedagogia","Psicologia","Serviço Social","Enfermagem"],
- Gestao:["Administração","Marketing","Economia"
+const cursos={
+ Social:["Psicologia","Pedagogia","Serviço Social","Enfermagem"],
+ Gestao:["Administração","Marketing","Economia","Gestão RH"],
+ Criativo:["Design","Publicidade","Arquitetura","Cinema"]
+};
+
+let atual=0;
+let pontos={Social:0,Gestao:0,Criativo:0};
+
+function iniciarTeste(){
+ document.getElementById("inicio").classList.add("hidden");
+ document.getElementById("quiz").classList.remove("hidden");
+ mostrarPergunta();
+}
+
+function mostrarPergunta(){
+ const p=perguntas[atual];
+ document.getElementById("pergunta").innerText=p.q;
+ const op=document.getElementById("opcoes");
+ op.innerHTML="";
+ p.a.forEach(o=>{
+   const d=document.createElement("div");
+   d.className="opcao";
+   d.innerText=o[0];
+   d.onclick=()=>responder(o[1]);
+   op.appendChild(d);
+ });
+}
+
+function responder(tipo){
+ pontos[tipo]++;
+ atual++;
+ atual<perguntas.length ? mostrarPergunta() : mostrarResultado();
+}
+
+function mostrarResultado(){
+ document.getElementById("quiz").classList.add("hidden");
+ document.getElementById("resultado").classList.remove("hidden");
+ const area=Object.keys(pontos).reduce((a,b)=>pontos[a]>pontos[b]?a:b);
+ document.getElementById("listaCursos").innerHTML =
+   cursos[area].map(c=><p>🎓 ${c}</p>).join("");
+}
+</script>
+
+</body>
+</html>
