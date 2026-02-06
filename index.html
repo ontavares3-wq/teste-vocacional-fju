@@ -71,7 +71,7 @@ button:hover {
       <img src="logo.png" alt="FJU Universitários">
     </div>
     <h1>Teste Vocacional</h1>
-    <p>Não é rótulo. É direção!</p>
+    <p>Não é rótulo. É direção.</p>
     <button onclick="iniciarTeste()">Começar teste</button>
   </div>
 
@@ -80,7 +80,6 @@ button:hover {
   <div id="resultado" class="hidden"></div>
 
 </div>
-
 <script>
 const questions = [
   {
@@ -106,104 +105,91 @@ const questions = [
       { text: "Criatividade e inovação", profile: "criativo" },
       { text: "Organização e estratégia", profile: "lideranca" }
     ]
-  },
-  {
-    question: "Se tivesse que escolher um ambiente de trabalho:",
-    options: [
-      { text: "Escritório, analisando dados", profile: "analitico" },
-      { text: "Ambiente dinâmico e com pessoas", profile: "social" },
-      { text: "Laboratório ou tecnologia", profile: "tecnologico" }
-    ]
-  },
-  {
-    question: "O que você faz melhor?",
-    options: [
-      { text: "Tomar decisões", profile: "lideranca" },
-      { text: "Criar soluções diferentes", profile: "criativo" },
-      { text: "Executar tarefas práticas", profile: "pratico" }
-    ]
-  },
-  {
-    question: "Você prefere aprender como?",
-    options: [
-      { text: "Na prática", profile: "pratico" },
-      { text: "Estudando e analisando", profile: "analitico" },
-      { text: "Criando e experimentando", profile: "criativo" }
-    ]
-  },
-  {
-    question: "Qual dessas frases mais parece com você?",
-    options: [
-      { text: "Gosto de ajudar pessoas", profile: "social" },
-      { text: "Gosto de liderar projetos", profile: "lideranca" },
-      { text: "Gosto de tecnologia", profile: "tecnologico" }
-    ]
-  },
-  {
-    question: "Quando surge um problema, você:",
-    options: [
-      { text: "Analisa tudo antes de agir", profile: "analitico" },
-      { text: "Chama pessoas para resolver junto", profile: "social" },
-      { text: "Parte logo para a solução", profile: "pratico" }
-    ]
-  },
-  {
-    question: "O que mais te motiva?",
-    options: [
-      { text: "Impactar pessoas", profile: "social" },
-      { text: "Criar algo novo", profile: "criativo" },
-      { text: "Resultados concretos", profile: "pratico" }
-    ]
-  },
-  {
-    question: "Você se vê mais como:",
-    options: [
-      { text: "Gestor ou líder", profile: "lideranca" },
-      { text: "Especialista técnico", profile: "tecnologico" },
-      { text: "Criador de ideias", profile: "criativo" }
-    ]
-  },
-  {
-    question: "Qual dessas áreas te chama mais atenção?",
-    options: [
-      { text: "Tecnologia e inovação", profile: "tecnologico" },
-      { text: "Saúde e bem-estar", profile: "social" },
-      { text: "Negócios e gestão", profile: "lideranca" }
-    ]
-  },
-  {
-    question: "Você prefere trabalhar:",
-    options: [
-      { text: "Com pessoas", profile: "social" },
-      { text: "Com números e lógica", profile: "analitico" },
-      { text: "Com criação e ideias", profile: "criativo" }
-    ]
-  },
-  {
-    question: "Qual habilidade você quer desenvolver?",
-    options: [
-      { text: "Liderança", profile: "lideranca" },
-      { text: "Criatividade", profile: "criativo" },
-      { text: "Técnica e precisão", profile: "tecnologico" }
-    ]
-  },
-  {
-    question: "Você se sente mais confortável:",
-    options: [
-      { text: "Falando em público", profile: "social" },
-      { text: "Planejando estratégias", profile: "analitico" },
-      { text: "Executando tarefas práticas", profile: "pratico" }
-    ]
-  },
-  {
-    question: "No futuro, você gostaria de:",
-    options: [
-      { text: "Empreender ou liderar", profile: "lideranca" },
-      { text: "Trabalhar com tecnologia", profile: "tecnologico" },
-      { text: "Criar impacto social", profile: "social" }
-    ]
   }
+  // depois você pode adicionar as outras perguntas aqui
 ];
+
+let current = 0;
+
+let score = {
+  lideranca: 0,
+  criativo: 0,
+  analitico: 0,
+  social: 0,
+  pratico: 0,
+  tecnologico: 0
+};
+
+function iniciarTeste() {
+  document.getElementById("inicio").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  mostrarPergunta();
+}
+
+function mostrarPergunta() {
+  const quiz = document.getElementById("quiz");
+  const q = questions[current];
+
+  let html = `
+    <h2>Pergunta ${current + 1} de ${questions.length}</h2>
+    <p>${q.question}</p>
+  `;
+
+  q.options.forEach(opt => {
+    html += `
+      <div class="opcao" onclick="responder('${opt.profile}')">
+        ${opt.text}
+      </div>
+    `;
+  });
+
+  if (current > 0) {
+    html += `<button onclick="voltar()">Voltar</button>`;
+  }
+
+  quiz.innerHTML = html;
+}
+
+function responder(profile) {
+  score[profile]++;
+  current++;
+
+  if (current < questions.length) {
+    mostrarPergunta();
+  } else {
+    mostrarResultado();
+  }
+}
+
+function voltar() {
+  if (current > 0) {
+    current--;
+    mostrarPergunta();
+  }
+}
+
+function mostrarResultado() {
+  document.getElementById("quiz").classList.add("hidden");
+  const r = document.getElementById("resultado");
+  r.classList.remove("hidden");
+
+  r.innerHTML = `
+    <h2>Resultado do Teste</h2>
+    <p>Com base nas suas respostas, essas áreas combinam com você:</p>
+
+    <ul>
+      <li><strong>Liderança:</strong> Administração, Gestão Pública, Marketing</li>
+      <li><strong>Criativo:</strong> Publicidade, Design, Arquitetura</li>
+      <li><strong>Analítico:</strong> Engenharia, Economia, Ciência de Dados</li>
+      <li><strong>Social:</strong> Psicologia, Pedagogia, Serviço Social</li>
+      <li><strong>Prático:</strong> Educação Física, Logística, Tecnólogos</li>
+      <li><strong>Tecnológico:</strong> TI, Sistemas de Informação, ADS</li>
+    </ul>
+
+    <button onclick="location.reload()">Refazer teste</button>
+  `;
+}
+</script>
 
 let indice = 0;
 let pontuacao = {
