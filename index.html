@@ -1,173 +1,178 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Teste Vocacional | FJU Universitários</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Teste Vocacional | FJU Universitários</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #0f0f0f;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: #fff;
+}
 
-    .container {
-      width: 100%;
-      max-width: 520px;
-      background: #1a1a1a;
-      padding: 30px;
-      border-radius: 16px;
-      text-align: center;
-      box-shadow: 0 0 20px rgba(255,0,0,0.2);
-    }
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 30px;
+  text-align: center;
+}
 
-    h1 {
-      color: #ff2d2d;
-      margin-bottom: 10px;
-    }
+.logo img {
+  width: 140px;
+  margin-bottom: 20px;
+}
 
-    p {
-      color: #ccc;
-      font-size: 16px;
-    }
+h1 {
+  color: #ff2d2d;
+}
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 10px;
-      background: #ff2d2d;
-      color: #fff;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+button {
+  background: #ff2d2d;
+  color: white;
+  border: none;
+  padding: 15px;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 15px;
+}
 
-    button:hover {
-      opacity: 0.9;
-    }
+button:hover {
+  opacity: 0.9;
+}
 
-    .option {
-      background: #2a2a2a;
-      margin-top: 10px;
-    }
+.opcao {
+  background: #1c1c1c;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+}
 
-    .option:hover {
-      background: #ff2d2d;
-    }
-  </style>
+.opcao:hover {
+  background: #2a2a2a;
+}
+
+.hidden {
+  display: none;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
-    <div id="app"></div>
+<div class="container">
+
+  <div id="inicio">
+    <div class="logo">
+      <img src="logo.png" alt="FJU Universitários">
+    </div>
+    <h1>Teste Vocacional</h1>
+    <p>Não é rótulo. É direção.</p>
+    <button onclick="iniciarTeste()">Começar teste</button>
   </div>
 
-  <script>
-    const app = document.getElementById("app");
+  <div id="quiz" class="hidden"></div>
 
-    let perguntaAtual = 0;
-    let pontos = {
-      social: 0,
-      exatas: 0,
-      criativo: 0,
-      saude: 0
-    };
+  <div id="resultado" class="hidden"></div>
 
-    const perguntas = [
-      {
-        texto: "Você prefere ajudar pessoas diretamente?",
-        opcoes: [
-          { texto: "Sim", tipo: "social" },
-          { texto: "Não", tipo: "exatas" }
-        ]
-      },
-      {
-        texto: "Você gosta de resolver problemas e cálculos?",
-        opcoes: [
-          { texto: "Gosto muito", tipo: "exatas" },
-          { texto: "Prefiro ideias", tipo: "criativo" }
-        ]
-      },
-      {
-        texto: "Você se vê cuidando da saúde de alguém?",
-        opcoes: [
-          { texto: "Sim", tipo: "saude" },
-          { texto: "Não", tipo: "criativo" }
-        ]
-      }
-    ];
+</div>
 
-    function telaInicial() {
-      app.innerHTML = `
-        <h1>Teste Vocacional</h1>
-        <p>Descubra cursos que combinam com você.<br>Não é rótulo, é direção.</p>
-        <button onclick="iniciarTeste()">Começar teste</button>
-      `;
-    }
+<script>
+const perguntas = [
+  { texto: "Você prefere resolver problemas ou ajudar pessoas?", tipo: "ambos" },
+  { texto: "Você gosta mais de números ou de pessoas?", tipo: "ambos" },
+  { texto: "Você se vê liderando equipes?", tipo: "social" },
+  { texto: "Você gosta de tecnologia?", tipo: "exatas" },
+  { texto: "Você se interessa por saúde?", tipo: "saude" },
+  { texto: "Você gosta de criar coisas novas?", tipo: "criativo" },
+  { texto: "Você prefere rotina ou desafio?", tipo: "ambos" },
+  { texto: "Você gosta de comunicação?", tipo: "social" },
+  { texto: "Você se imagina empreendendo?", tipo: "negocios" },
+  { texto: "Você gosta de estudar comportamento humano?", tipo: "social" },
+  { texto: "Você se interessa por justiça?", tipo: "humanas" },
+  { texto: "Você gosta de cuidar de pessoas?", tipo: "saude" },
+  { texto: "Você gosta de lógica?", tipo: "exatas" },
+  { texto: "Você gosta de arte e design?", tipo: "criativo" },
+  { texto: "Você se vê trabalhando em escritório?", tipo: "humanas" }
+];
 
-    function iniciarTeste() {
-      perguntaAtual = 0;
-      pontos = { social: 0, exatas: 0, criativo: 0, saude: 0 };
-      mostrarPergunta();
-    }
+let indice = 0;
+let pontuacao = {
+  exatas: 0,
+  humanas: 0,
+  saude: 0,
+  social: 0,
+  criativo: 0,
+  negocios: 0
+};
 
-    function mostrarPergunta() {
-      const pergunta = perguntas[perguntaAtual];
+function iniciarTeste() {
+  document.getElementById("inicio").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  mostrarPergunta();
+}
 
-      app.innerHTML = <h1>${pergunta.texto}</h1>;
+function mostrarPergunta() {
+  const quiz = document.getElementById("quiz");
+  const p = perguntas[indice];
 
-      pergunta.opcoes.forEach(opcao => {
-        const btn = document.createElement("button");
-        btn.className = "option";
-        btn.innerText = opcao.texto;
-        btn.onclick = () => {
-          pontos[opcao.tipo]++;
-          proximaPergunta();
-        };
-        app.appendChild(btn);
-      });
-    }
+  quiz.innerHTML = `
+    <h2>Pergunta ${indice + 1} de ${perguntas.length}</h2>
+    <p>${p.texto}</p>
 
-    function proximaPergunta() {
-      perguntaAtual++;
-      if (perguntaAtual < perguntas.length) {
-        mostrarPergunta();
-      } else {
-        mostrarResultado();
-      }
-    }
+    <div class="opcao" onclick="responder('${p.tipo}')">Concordo</div>
+    <div class="opcao" onclick="proxima()">Prefiro não responder</div>
 
-    function mostrarResultado() {
-      let maiorPerfil = Object.keys(pontos).reduce((a, b) =>
-        pontos[a] > pontos[b] ? a : b
-      );
+    ${indice > 0 ? '<button onclick="voltar()">Voltar</button>' : ''}
+  `;
+}
 
-      let cursos = {
-        social: ["Serviço Social", "Pedagogia", "Direito"],
-        exatas: ["Engenharia", "Ciência da Computação", "Sistemas de Informação"],
-        criativo: ["Publicidade", "Design", "Cinema"],
-        saude: ["Enfermagem", "Fisioterapia", "Psicologia"]
-      };
+function responder(tipo) {
+  if (pontuacao[tipo] !== undefined) {
+    pontuacao[tipo]++;
+  }
+  proxima();
+}
 
-      app.innerHTML = `
-        <h1>Seu perfil</h1>
-        <p>Áreas indicadas para você:</p>
-        <p><strong>${cursos[maiorPerfil].join(", ")}</strong></p>
-        <button onclick="telaInicial()">Refazer teste</button>
-      `;
-    }
+function proxima() {
+  indice++;
+  if (indice < perguntas.length) {
+    mostrarPergunta();
+  } else {
+    mostrarResultado();
+  }
+}
 
-    telaInicial();
-  </script>
+function voltar() {
+  if (indice > 0) {
+    indice--;
+    mostrarPergunta();
+  }
+}
+
+function mostrarResultado() {
+  document.getElementById("quiz").classList.add("hidden");
+  const r = document.getElementById("resultado");
+  r.classList.remove("hidden");
+
+  r.innerHTML = `
+    <h2>Áreas que combinam com você</h2>
+    <ul>
+      <li>Exatas: Engenharia, TI, Ciência da Computação</li>
+      <li>Humanas: Direito, História, Serviço Social</li>
+      <li>Saúde: Enfermagem, Psicologia, Educação Física</li>
+      <li>Social: Pedagogia, Comunicação, Administração</li>
+      <li>Criativo: Design, Publicidade, Artes Visuais</li>
+      <li>Negócios: Administração, Economia, Contabilidade</li>
+    </ul>
+    <button onclick="location.reload()">Refazer teste</button>
+  `;
+}
+</script>
 
 </body>
 </html>
