@@ -62,6 +62,22 @@ button:hover {
   display: none;
 }
 
+  /* Animação de transição suave */
+.fade {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 </style>
 </head>
 
@@ -238,12 +254,15 @@ function mostrarPergunta() {
   const p = perguntas[perguntaAtual];
 
   quiz.innerHTML = `
+  <div class="fade">
     <h2>${p.texto}</h2>
     ${p.opcoes.map(op =>
       `<button onclick="responder('${op.tipo}')">${op.texto}</button>`
     ).join("")}
     <p>${perguntaAtual + 1} de ${perguntas.length}</p>
-  `;
+  </div>
+`;
+
 }
 
 function responder(tipo) {
@@ -286,12 +305,15 @@ function mostrarResultado() {
     pontos[a] > pontos[b] ? a : b
   );
 
-  quiz.innerHTML = `
+ quiz.innerHTML = `
+  <div class="fade">
     <h2>${cursos[perfilFinal].nome}</h2>
     <p>De acordo com suas respostas, este é o perfil que mais combina com você.</p>
     <p><strong>Cursos indicados:</strong><br>${cursos[perfilFinal].lista}</p>
     <button onclick="location.reload()">Refazer teste</button>
-  `;
+  </div>
+`;
+
 }
 </script>
 
