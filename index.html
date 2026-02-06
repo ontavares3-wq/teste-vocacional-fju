@@ -2,219 +2,190 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Teste Vocacional | FJU Universitários</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Ícones -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<title>Teste Vocacional | FJU Universitários</title>
 
 <style>
-* { box-sizing: border-box; }
-
 body {
   margin: 0;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(180deg, #0b0b0b, #1a1a1a);
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
   color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-/* HEADER */
-header {
-  background: #000;
-  padding: 25px;
-  text-align: center;
-  border-bottom: 2px solid #ff2d2d;
-}
-
-header img {
-  max-width: 170px;
-}
-
-/* CONTAINER */
 .container {
-  max-width: 900px;
-  margin: auto;
-  padding: 30px 20px;
+  width: 100%;
+  max-width: 420px;
+  background: #121212;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 0 30px rgba(255,0,0,0.25);
+  text-align: center;
+}
+
+.logo {
+  margin-bottom: 10px;
+}
+
+.logo img {
+  max-width: 150px;
 }
 
 h1 {
-  text-align: center;
   color: #ff2d2d;
   margin-bottom: 10px;
 }
 
-.subtitle {
-  text-align: center;
-  opacity: .85;
-  margin-bottom: 35px;
+p {
+  color: #ccc;
 }
 
-/* QUESTIONS */
-.question {
-  background: #222;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 18px;
-  transition: transform .2s;
-}
-
-.question:hover {
-  transform: scale(1.01);
-}
-
-.question p {
-  margin-bottom: 12px;
-}
-
-label {
-  margin-right: 20px;
-  cursor: pointer;
-}
-
-/* BUTTON */
 button {
   width: 100%;
-  padding: 18px;
-  font-size: 18px;
-  background: #ff2d2d;
+  padding: 14px;
   border: none;
+  border-radius: 10px;
+  background: #ff2d2d;
   color: #fff;
-  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  margin-top: 25px;
+  margin-top: 15px;
 }
 
 button:hover {
-  opacity: 0.9;
+  background: #e02121;
 }
 
-/* RESULT */
-.result {
-  margin-top: 40px;
-  background: #111;
-  padding: 30px;
-  border-radius: 18px;
-  animation: fade .6s;
+.opcao {
+  background: #1f1f1f;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
 }
 
-@keyframes fade {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.opcao:hover {
+  border-color: #ff2d2d;
 }
 
-.result h2 {
-  color: #ff2d2d;
-}
-
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 20px;
-  opacity: .6;
-  font-size: 14px;
+.hidden {
+  display: none;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <img src="logo.png" alt="FJU Universitários">
-</header>
-
 <div class="container">
 
-<h1>Teste Vocacional</h1>
-<p class="subtitle">
-Descubra áreas que combinam com você.  
-<br>Não é rótulo, é direção <i class="fa-solid fa-rocket"></i>
-</p>
+  <!-- TELA INICIAL -->
+  <div id="inicio">
+    <div class="logo">
+      <!-- Se quiser, troque pelo nome da sua logo -->
+      <strong>FJU Universitários</strong>
+    </div>
 
-<form id="quiz"></form>
+    <h1>Teste Vocacional</h1>
+    <p>Descubra áreas que combinam com você.<br>Não é rótulo, é direção 💡</p>
 
-<button type="button" onclick="calcular()">
-  <i class="fa-solid fa-magnifying-glass"></i> Ver meu perfil
-</button>
+    <button onclick="iniciarTeste()">Ver meu perfil</button>
+  </div>
 
-<div id="resultado" class="result"></div>
+  <!-- PERGUNTAS -->
+  <div id="quiz" class="hidden">
+    <h2 id="pergunta"></h2>
+    <div id="opcoes"></div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="resultado" class="hidden">
+    <h2>Seu perfil é:</h2>
+    <h1 id="perfilFinal"></h1>
+    <p>Procure o FJU Universitários e desenvolva seus talentos 🚀</p>
+    <button onclick="location.reload()">Refazer teste</button>
+  </div>
 
 </div>
 
-<footer>
-  © FJU Universitários • Teste Vocacional
-</footer>
-
 <script>
 const perguntas = [
-["Você gosta de resolver problemas e desafios?", "exatas"],
-["Você se importa em ajudar pessoas diretamente?", "saude"],
-["Você se comunica bem com diferentes tipos de pessoas?", "comunicacao"],
-["Tecnologia e inovação te chamam atenção?", "tecnologia"],
-["Você gosta de liderar ou organizar equipes?", "gestao"],
-["Você curte debates, leitura e reflexão?", "humanas"],
-["Você se dá bem com números?", "exatas"],
-["Você se imagina trabalhando na área da saúde?", "saude"],
-["Você gosta de redes sociais e mídia?", "comunicacao"],
-["Você se interessa por computadores e sistemas?", "tecnologia"],
-["Você pensa em empreender ou administrar algo?", "gestao"],
-["Você se preocupa com questões sociais?", "humanas"],
-["Você prefere lógica a emoção?", "exatas"],
-["Você tem empatia com o sofrimento das pessoas?", "saude"],
-["Você gosta de falar em público?", "comunicacao"]
+  {
+    texto: "O que você mais gosta de fazer?",
+    opcoes: [
+      { texto: "Ajudar pessoas", tipo: "Social" },
+      { texto: "Organizar e liderar", tipo: "Liderança" },
+      { texto: "Criar coisas novas", tipo: "Criativo" }
+    ]
+  },
+  {
+    texto: "Qual ambiente combina mais com você?",
+    opcoes: [
+      { texto: "Trabalho em equipe", tipo: "Social" },
+      { texto: "Desafios e decisões", tipo: "Liderança" },
+      { texto: "Liberdade para criar", tipo: "Criativo" }
+    ]
+  },
+  {
+    texto: "Qual dessas frases mais te representa?",
+    opcoes: [
+      { texto: "Quero fazer a diferença", tipo: "Social" },
+      { texto: "Quero liderar", tipo: "Liderança" },
+      { texto: "Quero inovar", tipo: "Criativo" }
+    ]
+  }
 ];
 
-const form = document.getElementById("quiz");
+let perguntaAtual = 0;
+let pontos = { Social: 0, Liderança: 0, Criativo: 0 };
 
-perguntas.forEach((p,i)=>{
-  form.innerHTML += `
-    <div class="question">
-      <p>${i+1}. ${p[0]}</p>
-      <label>
-        <input type="radio" name="q${i}" value="${p[1]}" required> Sim
-      </label>
-      <label>
-        <input type="radio" name="q${i}" value=""> Não
-      </label>
-    </div>
-  `;
-});
+function iniciarTeste() {
+  document.getElementById("inicio").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  mostrarPergunta();
+}
 
-function calcular(){
-  let perfil = {
-    exatas:0, humanas:0, saude:0,
-    comunicacao:0, gestao:0, tecnologia:0
-  };
+function mostrarPergunta() {
+  const p = perguntas[perguntaAtual];
+  document.getElementById("pergunta").innerText = p.texto;
 
-  const data = new FormData(form);
-  for (let v of data.values()) {
-    if(v) perfil[v]++;
-  }
+  const opcoesDiv = document.getElementById("opcoes");
+  opcoesDiv.innerHTML = "";
 
-  let ranking = Object.entries(perfil).sort((a,b)=>b[1]-a[1]);
-
-  const cursos = {
-    exatas:["Engenharia","Arquitetura","Matemática","Estatística"],
-    humanas:["Direito","Pedagogia","Serviço Social","História"],
-    saude:["Enfermagem","Psicologia","Fisioterapia","Medicina"],
-    comunicacao:["Marketing","Publicidade","Jornalismo","Relações Públicas"],
-    gestao:["Administração","Economia","Contabilidade","Gestão de RH"],
-    tecnologia:["ADS","Sistemas de Informação","Ciência da Computação"]
-  };
-
-  let html = <h2><i class="fa-solid fa-user-check"></i> Seu perfil combina mais com:</h2>;
-
-  ranking.slice(0,3).forEach(r=>{
-    html += <p><strong>${r[0].toUpperCase()}</strong>: ${cursos[r[0]].join(", ")}</p>;
+  p.opcoes.forEach(opcao => {
+    const div = document.createElement("div");
+    div.className = "opcao";
+    div.innerText = opcao.texto;
+    div.onclick = () => escolher(opcao.tipo);
+    opcoesDiv.appendChild(div);
   });
+}
 
-  html += `
-    <p style="margin-top:20px;opacity:.85">
-    Esse teste é apenas uma orientação vocacional.  
-    Busque conhecimento, se conheça e coloque Deus à frente das suas decisões.
-    </p>
-  `;
+function escolher(tipo) {
+  pontos[tipo]++;
+  perguntaAtual++;
 
-  document.getElementById("resultado").innerHTML = html;
+  if (perguntaAtual < perguntas.length) {
+    mostrarPergunta();
+  } else {
+    mostrarResultado();
+  }
+}
+
+function mostrarResultado() {
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("resultado").classList.remove("hidden");
+
+  let perfil = Object.keys(pontos).reduce((a, b) =>
+    pontos[a] > pontos[b] ? a : b
+  );
+
+  document.getElementById("perfilFinal").innerText = perfil;
 }
 </script>
 
