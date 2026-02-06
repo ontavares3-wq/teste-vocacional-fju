@@ -11,33 +11,29 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
   color: #fff;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
 }
 
 .container {
   width: 100%;
   max-width: 420px;
   background: #121212;
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 24px;
-  box-shadow: 0 0 30px rgba(255,0,0,0.25);
+  box-shadow: 0 0 35px rgba(255,0,0,0.25);
   text-align: center;
 }
 
-.logo {
-  margin-bottom: 10px;
-}
-
 .logo img {
-  max-width: 150px;
+  max-width: 140px;
+  margin-bottom: 15px;
 }
 
-h1 {
+h1, h2 {
   color: #ff2d2d;
-  margin-bottom: 10px;
 }
 
 p {
@@ -57,8 +53,12 @@ button {
   margin-top: 15px;
 }
 
+button.secondary {
+  background: #333;
+}
+
 button:hover {
-  background: #e02121;
+  opacity: 0.9;
 }
 
 .opcao {
@@ -77,6 +77,21 @@ button:hover {
 .hidden {
   display: none;
 }
+
+.progress {
+  height: 6px;
+  background: #333;
+  border-radius: 10px;
+  margin: 15px 0;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #ff2d2d;
+  width: 0%;
+  border-radius: 10px;
+  transition: width 0.3s;
+}
 </style>
 </head>
 
@@ -84,110 +99,54 @@ button:hover {
 
 <div class="container">
 
-  <!-- TELA INICIAL -->
-  <div id="inicio">
-    <div class="logo">
-      <!-- Se quiser, troque pelo nome da sua logo -->
-      <strong>FJU Universitários</strong>
-    </div>
-
-    <h1>Teste Vocacional</h1>
-    <p>Descubra áreas que combinam com você.<br>Não é rótulo, é direção 💡</p>
-
-    <button onclick="iniciarTeste()">Ver meu perfil</button>
+<!-- INÍCIO -->
+<div id="inicio">
+  <div class="logo">
+    <img src="logo.png" alt="FJU Universitários">
   </div>
+  <h1>Teste Vocacional</h1>
+  <p>Não é rótulo.<br>É direção para o seu futuro 🎓</p>
+  <button onclick="iniciar()">Começar teste</button>
+</div>
 
-  <!-- PERGUNTAS -->
-  <div id="quiz" class="hidden">
-    <h2 id="pergunta"></h2>
-    <div id="opcoes"></div>
+<!-- QUIZ -->
+<div id="quiz" class="hidden">
+  <div class="progress">
+    <div class="progress-bar" id="barra"></div>
   </div>
+  <h2 id="pergunta"></h2>
+  <div id="opcoes"></div>
+  <button class="secondary" onclick="voltar()">Voltar</button>
+</div>
 
-  <!-- RESULTADO -->
-  <div id="resultado" class="hidden">
-    <h2>Seu perfil é:</h2>
-    <h1 id="perfilFinal"></h1>
-    <p>Procure o FJU Universitários e desenvolva seus talentos 🚀</p>
-    <button onclick="location.reload()">Refazer teste</button>
-  </div>
+<!-- RESULTADO -->
+<div id="resultado" class="hidden">
+  <h2>Cursos indicados para você:</h2>
+  <div id="listaCursos"></div>
+  <button onclick="location.reload()">Refazer teste</button>
+</div>
 
 </div>
 
 <script>
 const perguntas = [
-  {
-    texto: "O que você mais gosta de fazer?",
-    opcoes: [
-      { texto: "Ajudar pessoas", tipo: "Social" },
-      { texto: "Organizar e liderar", tipo: "Liderança" },
-      { texto: "Criar coisas novas", tipo: "Criativo" }
-    ]
-  },
-  {
-    texto: "Qual ambiente combina mais com você?",
-    opcoes: [
-      { texto: "Trabalho em equipe", tipo: "Social" },
-      { texto: "Desafios e decisões", tipo: "Liderança" },
-      { texto: "Liberdade para criar", tipo: "Criativo" }
-    ]
-  },
-  {
-    texto: "Qual dessas frases mais te representa?",
-    opcoes: [
-      { texto: "Quero fazer a diferença", tipo: "Social" },
-      { texto: "Quero liderar", tipo: "Liderança" },
-      { texto: "Quero inovar", tipo: "Criativo" }
-    ]
-  }
+ {q:"O que mais te motiva?", a:[["Criar", "Criativo"],["Ajudar pessoas","Social"],["Liderar","Gestao"]]},
+ {q:"Você se sente melhor quando:", a:[["Inovando","Tecnologia"],["Organizando","Gestao"],["Comunicando","Social"]]},
+ {q:"Qual atividade te atrai mais?", a:[["Arte","Criativo"],["Direito","Juridico"],["Cálculos","Tecnologia"]]},
+ {q:"Você prefere:", a:[["Trabalhar em grupo","Social"],["Decidir","Gestao"],["Criar sozinho","Criativo"]]},
+ {q:"O que você faria melhor?", a:[["Ensinar","Social"],["Programar","Tecnologia"],["Empreender","Gestao"]]},
+ {q:"Qual dessas matérias você gosta mais?", a:[["Português","Juridico"],["Matemática","Tecnologia"],["Artes","Criativo"]]},
+ {q:"Você se considera:", a:[["Criativo","Criativo"],["Responsável","Gestao"],["Justo","Juridico"]]},
+ {q:"Prefere resolver problemas:", a:[["Com lógica","Tecnologia"],["Com diálogo","Social"],["Com estratégia","Gestao"]]},
+ {q:"Gosta de falar em público?", a:[["Sim","Social"],["Depende","Gestao"],["Não","Tecnologia"]]},
+ {q:"Qual ambiente combina com você?", a:[["Escritório","Gestao"],["Comunidade","Social"],["Estúdio","Criativo"]]},
+ {q:"Você se vê no futuro:", a:[["Criando","Criativo"],["Liderando","Gestao"],["Defendendo","Juridico"]]},
+ {q:"Seu ponto forte:", a:[["Imaginação","Criativo"],["Organização","Gestao"],["Empatia","Social"]]},
+ {q:"Prefere estabilidade ou desafio?", a:[["Desafio","Tecnologia"],["Equilíbrio","Gestao"],["Impacto social","Social"]]},
+ {q:"Gosta de tecnologia?", a:[["Muito","Tecnologia"],["Pouco","Social"],["Nada","Criativo"]]},
+ {q:"O que te dá mais satisfação?", a:[["Ver pessoas crescerem","Social"],["Criar algo novo","Criativo"],["Bater metas","Gestao"]]}
 ];
 
-let perguntaAtual = 0;
-let pontos = { Social: 0, Liderança: 0, Criativo: 0 };
-
-function iniciarTeste() {
-  document.getElementById("inicio").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-  mostrarPergunta();
-}
-
-function mostrarPergunta() {
-  const p = perguntas[perguntaAtual];
-  document.getElementById("pergunta").innerText = p.texto;
-
-  const opcoesDiv = document.getElementById("opcoes");
-  opcoesDiv.innerHTML = "";
-
-  p.opcoes.forEach(opcao => {
-    const div = document.createElement("div");
-    div.className = "opcao";
-    div.innerText = opcao.texto;
-    div.onclick = () => escolher(opcao.tipo);
-    opcoesDiv.appendChild(div);
-  });
-}
-
-function escolher(tipo) {
-  pontos[tipo]++;
-  perguntaAtual++;
-
-  if (perguntaAtual < perguntas.length) {
-    mostrarPergunta();
-  } else {
-    mostrarResultado();
-  }
-}
-
-function mostrarResultado() {
-  document.getElementById("quiz").classList.add("hidden");
-  document.getElementById("resultado").classList.remove("hidden");
-
-  let perfil = Object.keys(pontos).reduce((a, b) =>
-    pontos[a] > pontos[b] ? a : b
-  );
-
-  document.getElementById("perfilFinal").innerText = perfil;
-}
-</script>
-
-</body>
-</html>
+const cursos = {
+ Criativo:["Design","Publicidade","Arquitetura","Cinema","Moda"],
+ Social:["Pedagogia","Serviço Social","Psicologia","Enfermagem","Educação
