@@ -57,10 +57,6 @@ button.secondary {
   background: #333;
 }
 
-button:hover {
-  opacity: 0.9;
-}
-
 .opcao {
   background: #1f1f1f;
   margin-top: 10px;
@@ -106,7 +102,7 @@ button:hover {
   </div>
   <h1>Teste Vocacional</h1>
   <p>Não é rótulo.<br>É direção para o seu futuro 🎓</p>
-  <button onclick="iniciar()">Começar teste</button>
+  <button id="btnIniciar" type="button">Começar teste</button>
 </div>
 
 <!-- QUIZ -->
@@ -116,37 +112,40 @@ button:hover {
   </div>
   <h2 id="pergunta"></h2>
   <div id="opcoes"></div>
-  <button class="secondary" onclick="voltar()">Voltar</button>
+  <button id="btnVoltar" class="secondary" type="button">Voltar</button>
 </div>
 
 <!-- RESULTADO -->
 <div id="resultado" class="hidden">
   <h2>Cursos indicados para você:</h2>
   <div id="listaCursos"></div>
-  <button onclick="location.reload()">Refazer teste</button>
+  <button type="button" onclick="location.reload()">Refazer teste</button>
 </div>
 
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+
 const perguntas = [
- {q:"O que mais te motiva?", a:[["Criar", "Criativo"],["Ajudar pessoas","Social"],["Liderar","Gestao"]]},
+ {q:"O que mais te motiva?", a:[["Criar","Criativo"],["Ajudar pessoas","Social"],["Liderar","Gestao"]]},
  {q:"Você se sente melhor quando:", a:[["Inovando","Tecnologia"],["Organizando","Gestao"],["Comunicando","Social"]]},
  {q:"Qual atividade te atrai mais?", a:[["Arte","Criativo"],["Direito","Juridico"],["Cálculos","Tecnologia"]]},
  {q:"Você prefere:", a:[["Trabalhar em grupo","Social"],["Decidir","Gestao"],["Criar sozinho","Criativo"]]},
  {q:"O que você faria melhor?", a:[["Ensinar","Social"],["Programar","Tecnologia"],["Empreender","Gestao"]]},
- {q:"Qual dessas matérias você gosta mais?", a:[["Português","Juridico"],["Matemática","Tecnologia"],["Artes","Criativo"]]},
- {q:"Você se considera:", a:[["Criativo","Criativo"],["Responsável","Gestao"],["Justo","Juridico"]]},
- {q:"Prefere resolver problemas:", a:[["Com lógica","Tecnologia"],["Com diálogo","Social"],["Com estratégia","Gestao"]]},
- {q:"Gosta de falar em público?", a:[["Sim","Social"],["Depende","Gestao"],["Não","Tecnologia"]]},
- {q:"Qual ambiente combina com você?", a:[["Escritório","Gestao"],["Comunidade","Social"],["Estúdio","Criativo"]]},
- {q:"Você se vê no futuro:", a:[["Criando","Criativo"],["Liderando","Gestao"],["Defendendo","Juridico"]]},
- {q:"Seu ponto forte:", a:[["Imaginação","Criativo"],["Organização","Gestao"],["Empatia","Social"]]},
- {q:"Prefere estabilidade ou desafio?", a:[["Desafio","Tecnologia"],["Equilíbrio","Gestao"],["Impacto social","Social"]]},
- {q:"Gosta de tecnologia?", a:[["Muito","Tecnologia"],["Pouco","Social"],["Nada","Criativo"]]},
- {q:"O que te dá mais satisfação?", a:[["Ver pessoas crescerem","Social"],["Criar algo novo","Criativo"],["Bater metas","Gestao"]]}
+ {q:"Matéria favorita:", a:[["Artes","Criativo"],["Matemática","Tecnologia"],["Português","Juridico"]]},
+ {q:"Você se considera:", a:[["Criativo","Criativo"],["Justo","Juridico"],["Responsável","Gestao"]]},
+ {q:"Resolve problemas com:", a:[["Lógica","Tecnologia"],["Diálogo","Social"],["Estratégia","Gestao"]]},
+ {q:"Falar em público:", a:[["Gosto","Social"],["Consigo","Gestao"],["Evito","Tecnologia"]]},
+ {q:"Ambiente ideal:", a:[["Estúdio","Criativo"],["Comunidade","Social"],["Empresa","Gestao"]]},
+ {q:"Você se vê:", a:[["Criando","Criativo"],["Defendendo","Juridico"],["Programando","Tecnologia"]]},
+ {q:"Seu ponto forte:", a:[["Empatia","Social"],["Organização","Gestao"],["Imaginação","Criativo"]]},
+ {q:"Prefere:", a:[["Desafios","Tecnologia"],["Impacto social","Social"],["Resultados","Gestao"]]},
+ {q:"Tecnologia para você é:", a:[["Essencial","Tecnologia"],["Útil","Gestao"],["Secundária","Social"]]},
+ {q:"Maior satisfação:", a:[["Criar algo novo","Criativo"],["Ajudar pessoas","Social"],["Alcançar metas","Gestao"]]}
 ];
 
 const cursos = {
  Criativo:["Design","Publicidade","Arquitetura","Cinema","Moda"],
- Social:["Pedagogia","Serviço Social","Psicologia","Enfermagem","Educação
+ Social:["Pedagogia","Psicologia","Serviço Social","Enfermagem"],
+ Gestao:["Administração","Marketing","Economia"
