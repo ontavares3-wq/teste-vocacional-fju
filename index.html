@@ -95,51 +95,126 @@ const pontos = {
 
 const perguntas = [
   {
-    texto: "Em um grupo, você prefere:",
+    texto: "Quando está em um grupo, você prefere:",
     opcoes: [
-      { texto: "Liderar e organizar", tipo: "lideranca" },
-      { texto: "Criar ideias e soluções", tipo: "criativo" },
-      { texto: "Analisar tudo antes de agir", tipo: "analitico" }
+      { texto: "Organizar e liderar", tipo: "lideranca" },
+      { texto: "Observar e analisar", tipo: "analitico" },
+      { texto: "Criar ideias diferentes", tipo: "criativo" }
     ]
   },
   {
-    texto: "Qual atividade mais te anima?",
+    texto: "Qual atividade mais combina com você?",
     opcoes: [
-      { texto: "Ajudar pessoas", tipo: "social" },
-      { texto: "Resolver problemas", tipo: "analitico" },
-      { texto: "Trabalhar com tecnologia", tipo: "tecnologico" }
+      { texto: "Ajudar pessoas diretamente", tipo: "social" },
+      { texto: "Resolver problemas técnicos", tipo: "tecnologico" },
+      { texto: "Executar tarefas práticas", tipo: "pratico" }
+    ]
+  },
+  {
+    texto: "Na escola, você se destacava mais em:",
+    opcoes: [
+      { texto: "Matemática e lógica", tipo: "analitico" },
+      { texto: "Trabalhos em grupo", tipo: "social" },
+      { texto: "Apresentações e criatividade", tipo: "criativo" }
+    ]
+  },
+  {
+    texto: "Você se sente realizado quando:",
+    opcoes: [
+      { texto: "Vê resultados concretos", tipo: "pratico" },
+      { texto: "Resolve algo complexo", tipo: "analitico" },
+      { texto: "Inspira outras pessoas", tipo: "lideranca" }
+    ]
+  },
+  {
+    texto: "Qual dessas opções mais te atrai?",
+    opcoes: [
+      { texto: "Tecnologia e inovação", tipo: "tecnologico" },
+      { texto: "Comunicação e expressão", tipo: "criativo" },
+      { texto: "Cuidar e orientar pessoas", tipo: "social" }
+    ]
+  },
+  {
+    texto: "Você prefere trabalhar:",
+    opcoes: [
+      { texto: "Com pessoas", tipo: "social" },
+      { texto: "Com números e dados", tipo: "analitico" },
+      { texto: "Com máquinas ou sistemas", tipo: "tecnologico" }
+    ]
+  },
+  {
+    texto: "Em um problema difícil, você:",
+    opcoes: [
+      { texto: "Analisa todas as possibilidades", tipo: "analitico" },
+      { texto: "Busca uma solução prática", tipo: "pratico" },
+      { texto: "Chama o grupo para decidir", tipo: "lideranca" }
+    ]
+  },
+  {
+    texto: "Você se considera uma pessoa:",
+    opcoes: [
+      { texto: "Criativa", tipo: "criativo" },
+      { texto: "Organizada", tipo: "lideranca" },
+      { texto: "Prestativa", tipo: "social" }
+    ]
+  },
+  {
+    texto: "Qual ambiente você prefere?",
+    opcoes: [
+      { texto: "Escritório ou empresa", tipo: "lideranca" },
+      { texto: "Laboratório ou tecnologia", tipo: "tecnologico" },
+      { texto: "Campo ou atividade física", tipo: "pratico" }
     ]
   },
   {
     texto: "Você aprende melhor quando:",
     opcoes: [
-      { texto: "Coloca a mão na massa", tipo: "pratico" },
-      { texto: "Pesquisa e estuda", tipo: "analitico" },
-      { texto: "Cria algo novo", tipo: "criativo" }
+      { texto: "Lê e estuda sozinho", tipo: "analitico" },
+      { texto: "Coloca em prática", tipo: "pratico" },
+      { texto: "Troca ideias com outros", tipo: "social" }
     ]
   },
   {
-    texto: "Qual dessas áreas te chama mais atenção?",
+    texto: "Qual dessas funções você escolheria?",
     opcoes: [
-      { texto: "Negócios e gestão", tipo: "lideranca" },
-      { texto: "Tecnologia e inovação", tipo: "tecnologico" },
-      { texto: "Comunicação e expressão", tipo: "criativo" }
+      { texto: "Professor ou orientador", tipo: "social" },
+      { texto: "Engenheiro ou analista", tipo: "analitico" },
+      { texto: "Gestor ou coordenador", tipo: "lideranca" }
     ]
   },
   {
-    texto: "Você se sente melhor quando:",
+    texto: "Você gosta mais de:",
     opcoes: [
-      { texto: "Ajuda alguém diretamente", tipo: "social" },
-      { texto: "Conclui uma tarefa prática", tipo: "pratico" },
-      { texto: "Resolve algo complexo", tipo: "analitico" }
+      { texto: "Criar projetos", tipo: "criativo" },
+      { texto: "Seguir processos", tipo: "analitico" },
+      { texto: "Executar tarefas", tipo: "pratico" }
+    ]
+  },
+  {
+    texto: "Seu maior ponto forte é:",
+    opcoes: [
+      { texto: "Comunicação", tipo: "social" },
+      { texto: "Lógica", tipo: "analitico" },
+      { texto: "Iniciativa", tipo: "lideranca" }
+    ]
+  },
+  {
+    texto: "Você se interessa mais por:",
+    opcoes: [
+      { texto: "Tecnologia digital", tipo: "tecnologico" },
+      { texto: "Negócios", tipo: "lideranca" },
+      { texto: "Arte e design", tipo: "criativo" }
+    ]
+  },
+  {
+    texto: "No futuro, você se vê:",
+    opcoes: [
+      { texto: "Liderando equipes", tipo: "lideranca" },
+      { texto: "Criando soluções inovadoras", tipo: "criativo" },
+      { texto: "Analisando e planejando", tipo: "analitico" }
     ]
   }
 ];
-
-// duplicação simples para fechar 15 perguntas
-while (perguntas.length < 15) {
-  perguntas.push(...perguntas.slice(0, 5));
-}
 
 function iniciarTeste() {
   document.getElementById("inicio").classList.add("hidden");
@@ -176,22 +251,40 @@ function mostrarResultado() {
   const quiz = document.getElementById("quiz");
 
   const cursos = {
-    lideranca: "Administração, Gestão Pública, Marketing",
-    criativo: "Publicidade, Design, Arquitetura",
-    analitico: "Engenharia, Economia, Ciência de Dados",
-    social: "Psicologia, Pedagogia, Serviço Social",
-    pratico: "Educação Física, Logística, Tecnólogos",
-    tecnologico: "TI, Sistemas de Informação, ADS"
+    lideranca: {
+      nome: "Perfil de Liderança",
+      lista: "Administração, Gestão Pública, Marketing, Recursos Humanos, Gestão Comercial"
+    },
+    criativo: {
+      nome: "Perfil Criativo",
+      lista: "Publicidade e Propaganda, Design Gráfico, Arquitetura, Produção Audiovisual"
+    },
+    analitico: {
+      nome: "Perfil Analítico",
+      lista: "Engenharia, Economia, Estatística, Ciência de Dados, Contabilidade"
+    },
+    social: {
+      nome: "Perfil Social",
+      lista: "Psicologia, Pedagogia, Serviço Social, Enfermagem"
+    },
+    pratico: {
+      nome: "Perfil Prático",
+      lista: "Educação Física, Logística, Tecnólogos, Gestão de Operações"
+    },
+    tecnologico: {
+      nome: "Perfil Tecnológico",
+      lista: "Sistemas de Informação, Análise e Desenvolvimento de Sistemas, Engenharia de Software"
+    }
   };
 
-  const ordenado = Object.entries(pontos)
-    .sort((a, b) => b[1] - a[1]);
+  let perfilFinal = Object.keys(pontos).reduce((a, b) =>
+    pontos[a] > pontos[b] ? a : b
+  );
 
   quiz.innerHTML = `
-    <h2>Resultado do Teste</h2>
-    ${ordenado.map(r =>
-      `<p><strong>${r[0]}:</strong> ${cursos[r[0]]}</p>`
-    ).join("")}
+    <h2>${cursos[perfilFinal].nome}</h2>
+    <p>De acordo com suas respostas, este é o perfil que mais combina com você.</p>
+    <p><strong>Cursos indicados:</strong><br>${cursos[perfilFinal].lista}</p>
     <button onclick="location.reload()">Refazer teste</button>
   `;
 }
