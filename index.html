@@ -82,22 +82,127 @@ button:hover {
 </div>
 
 <script>
-const perguntas = [
-  { texto: "Você prefere resolver problemas ou ajudar pessoas?", tipo: "ambos" },
-  { texto: "Você gosta mais de números ou de pessoas?", tipo: "ambos" },
-  { texto: "Você se vê liderando equipes?", tipo: "social" },
-  { texto: "Você gosta de tecnologia?", tipo: "exatas" },
-  { texto: "Você se interessa por saúde?", tipo: "saude" },
-  { texto: "Você gosta de criar coisas novas?", tipo: "criativo" },
-  { texto: "Você prefere rotina ou desafio?", tipo: "ambos" },
-  { texto: "Você gosta de comunicação?", tipo: "social" },
-  { texto: "Você se imagina empreendendo?", tipo: "negocios" },
-  { texto: "Você gosta de estudar comportamento humano?", tipo: "social" },
-  { texto: "Você se interessa por justiça?", tipo: "humanas" },
-  { texto: "Você gosta de cuidar de pessoas?", tipo: "saude" },
-  { texto: "Você gosta de lógica?", tipo: "exatas" },
-  { texto: "Você gosta de arte e design?", tipo: "criativo" },
-  { texto: "Você se vê trabalhando em escritório?", tipo: "humanas" }
+const questions = [
+  {
+    question: "Quando você está em um grupo, o que mais combina com você?",
+    options: [
+      { text: "Assumir a liderança e organizar tudo", profile: "lideranca" },
+      { text: "Ajudar as pessoas a se sentirem bem", profile: "social" },
+      { text: "Observar tudo antes de agir", profile: "analitico" }
+    ]
+  },
+  {
+    question: "Qual atividade te anima mais?",
+    options: [
+      { text: "Criar algo novo (arte, ideias, conteúdo)", profile: "criativo" },
+      { text: "Resolver problemas e desafios", profile: "analitico" },
+      { text: "Colocar a mão na massa", profile: "pratico" }
+    ]
+  },
+  {
+    question: "Na escola ou trabalho, você se destaca mais por:",
+    options: [
+      { text: "Comunicação e trabalho em equipe", profile: "social" },
+      { text: "Criatividade e inovação", profile: "criativo" },
+      { text: "Organização e estratégia", profile: "lideranca" }
+    ]
+  },
+  {
+    question: "Se tivesse que escolher um ambiente de trabalho:",
+    options: [
+      { text: "Escritório, analisando dados", profile: "analitico" },
+      { text: "Ambiente dinâmico e com pessoas", profile: "social" },
+      { text: "Laboratório ou tecnologia", profile: "tecnologico" }
+    ]
+  },
+  {
+    question: "O que você faz melhor?",
+    options: [
+      { text: "Tomar decisões", profile: "lideranca" },
+      { text: "Criar soluções diferentes", profile: "criativo" },
+      { text: "Executar tarefas práticas", profile: "pratico" }
+    ]
+  },
+  {
+    question: "Você prefere aprender como?",
+    options: [
+      { text: "Na prática", profile: "pratico" },
+      { text: "Estudando e analisando", profile: "analitico" },
+      { text: "Criando e experimentando", profile: "criativo" }
+    ]
+  },
+  {
+    question: "Qual dessas frases mais parece com você?",
+    options: [
+      { text: "Gosto de ajudar pessoas", profile: "social" },
+      { text: "Gosto de liderar projetos", profile: "lideranca" },
+      { text: "Gosto de tecnologia", profile: "tecnologico" }
+    ]
+  },
+  {
+    question: "Quando surge um problema, você:",
+    options: [
+      { text: "Analisa tudo antes de agir", profile: "analitico" },
+      { text: "Chama pessoas para resolver junto", profile: "social" },
+      { text: "Parte logo para a solução", profile: "pratico" }
+    ]
+  },
+  {
+    question: "O que mais te motiva?",
+    options: [
+      { text: "Impactar pessoas", profile: "social" },
+      { text: "Criar algo novo", profile: "criativo" },
+      { text: "Resultados concretos", profile: "pratico" }
+    ]
+  },
+  {
+    question: "Você se vê mais como:",
+    options: [
+      { text: "Gestor ou líder", profile: "lideranca" },
+      { text: "Especialista técnico", profile: "tecnologico" },
+      { text: "Criador de ideias", profile: "criativo" }
+    ]
+  },
+  {
+    question: "Qual dessas áreas te chama mais atenção?",
+    options: [
+      { text: "Tecnologia e inovação", profile: "tecnologico" },
+      { text: "Saúde e bem-estar", profile: "social" },
+      { text: "Negócios e gestão", profile: "lideranca" }
+    ]
+  },
+  {
+    question: "Você prefere trabalhar:",
+    options: [
+      { text: "Com pessoas", profile: "social" },
+      { text: "Com números e lógica", profile: "analitico" },
+      { text: "Com criação e ideias", profile: "criativo" }
+    ]
+  },
+  {
+    question: "Qual habilidade você quer desenvolver?",
+    options: [
+      { text: "Liderança", profile: "lideranca" },
+      { text: "Criatividade", profile: "criativo" },
+      { text: "Técnica e precisão", profile: "tecnologico" }
+    ]
+  },
+  {
+    question: "Você se sente mais confortável:",
+    options: [
+      { text: "Falando em público", profile: "social" },
+      { text: "Planejando estratégias", profile: "analitico" },
+      { text: "Executando tarefas práticas", profile: "pratico" }
+    ]
+  },
+  {
+    question: "No futuro, você gostaria de:",
+    options: [
+      { text: "Empreender ou liderar", profile: "lideranca" },
+      { text: "Trabalhar com tecnologia", profile: "tecnologico" },
+      { text: "Criar impacto social", profile: "social" }
+    ]
+  }
 ];
 
 let indice = 0;
