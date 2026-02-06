@@ -1,217 +1,173 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Teste Vocacional | FJU Universitários</title>
+  <meta charset="UTF-8">
+  <title>Teste Vocacional | FJU Universitários</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: radial-gradient(circle at top, #1a1a1a, #000);
-  color: #fff;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-.container {
-  max-width: 700px;
-  margin: auto;
-  padding: 50px 25px;
-  text-align: center;
-}
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255,0,0,0.2);
+    }
 
-.logo {
-  width: 150px;
-  margin-bottom: 25px;
-}
+    h1 {
+      color: #ff2d2d;
+      margin-bottom: 10px;
+    }
 
-h1 {
-  color: #ff1e1e;
-  font-size: 32px;
-  margin-bottom: 10px;
-}
+    p {
+      color: #ccc;
+      font-size: 16px;
+    }
 
-p {
-  font-size: 17px;
-  opacity: 0.9;
-}
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 10px;
+      background: #ff2d2d;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-button {
-  background: #ff1e1e;
-  border: none;
-  padding: 15px 30px;
-  border-radius: 35px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-  cursor: pointer;
-  margin-top: 15px;
-}
+    button:hover {
+      opacity: 0.9;
+    }
 
-button:hover {
-  opacity: 0.9;
-}
+    .option {
+      background: #2a2a2a;
+      margin-top: 10px;
+    }
 
-.pergunta {
-  margin-top: 35px;
-}
-
-.opcao {
-  display: block;
-  width: 100%;
-  margin: 12px 0;
-}
-
-.barra {
-  height: 6px;
-  background: #333;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-top: 20px;
-}
-
-.progresso {
-  height: 100%;
-  width: 0%;
-  background: #ff1e1e;
-  transition: width 0.3s;
-}
-
-.resultado ul {
-  text-align: left;
-  max-width: 400px;
-  margin: 15px auto;
-}
-</style>
+    .option:hover {
+      background: #ff2d2d;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
-
-  <img src="logo.png" class="logo" alt="FJU Universitários">
-
-  <h1>Teste Vocacional</h1>
-  <p id="descricao">Descubra cursos que combinam com você, não é rótulo e sim orientação!</p>
-
-  <div class="barra">
-    <div class="progresso" id="progresso"></div>
+  <div class="container">
+    <div id="app"></div>
   </div>
 
-  <div id="area"></div>
+  <script>
+    const app = document.getElementById("app");
 
-</div>
+    let perguntaAtual = 0;
+    let pontos = {
+      social: 0,
+      exatas: 0,
+      criativo: 0,
+      saude: 0
+    };
 
-<script>
-const perguntas = [
-  { t: "O que mais te atrai em um trabalho?", a: "criatividade", b: "pessoas", c: "números" },
-  { t: "Você prefere resolver problemas:", a: "de forma criativa", b: "com diálogo", c: "com lógica" },
-  { t: "Qual ambiente você prefere?", a: "artístico", b: "social", c: "técnico" },
-  { t: "O que você mais valoriza?", a: "expressão", b: "impacto social", c: "resultado" },
-  { t: "Você se destaca mais em:", a: "ideias", b: "comunicação", c: "organização" },
-  { t: "Seu ponto forte é:", a: "imaginação", b: "empatia", c: "análise" },
-  { t: "Você prefere trabalhar:", a: "criando", b: "orientando", c: "planejando" },
-  { t: "Qual tarefa te anima mais?", a: "inventar", b: "ajudar", c: "estruturar" },
-  { t: "Você se vê no futuro:", a: "criando conteúdo", b: "cuidando de pessoas", c: "gerenciando sistemas" },
-  { t: "Você aprende melhor:", a: "visualizando", b: "conversando", c: "calculando" },
-  { t: "Seu estilo é mais:", a: "inovador", b: "humano", c: "estratégico" },
-  { t: "Você prefere projetos:", a: "livres", b: "coletivos", c: "controlados" },
-  { t: "Você lida melhor com:", a: "ideias", b: "emoções", c: "dados" },
-  { t: "Seu interesse maior é:", a: "arte e mídia", b: "sociedade", c: "tecnologia" },
-  { t: "Você se realiza quando:", a: "cria algo novo", b: "ajuda alguém", c: "resolve algo complexo" }
-];
+    const perguntas = [
+      {
+        texto: "Você prefere ajudar pessoas diretamente?",
+        opcoes: [
+          { texto: "Sim", tipo: "social" },
+          { texto: "Não", tipo: "exatas" }
+        ]
+      },
+      {
+        texto: "Você gosta de resolver problemas e cálculos?",
+        opcoes: [
+          { texto: "Gosto muito", tipo: "exatas" },
+          { texto: "Prefiro ideias", tipo: "criativo" }
+        ]
+      },
+      {
+        texto: "Você se vê cuidando da saúde de alguém?",
+        opcoes: [
+          { texto: "Sim", tipo: "saude" },
+          { texto: "Não", tipo: "criativo" }
+        ]
+      }
+    ];
 
-let i = 0;
-let pontos = {
-  criatividade: 0,
-  pessoas: 0,
-  numeros: 0
-};
+    function telaInicial() {
+      app.innerHTML = `
+        <h1>Teste Vocacional</h1>
+        <p>Descubra cursos que combinam com você.<br>Não é rótulo, é direção.</p>
+        <button onclick="iniciarTeste()">Começar teste</button>
+      `;
+    }
 
-function iniciar() {
-  i = 0;
-  pontos = { criatividade: 0, pessoas: 0, numeros: 0 };
-  document.getElementById("descricao").style.display = "none";
-  mostrar();
-}
+    function iniciarTeste() {
+      perguntaAtual = 0;
+      pontos = { social: 0, exatas: 0, criativo: 0, saude: 0 };
+      mostrarPergunta();
+    }
 
-function mostrar() {
-  const p = perguntas[i];
-  document.getElementById("area").innerHTML = `
-    <div class="pergunta">
-      <h3>${p.t}</h3>
-      <button class="opcao" onclick="responder('criatividade')">${p.a}</button>
-      <button class="opcao" onclick="responder('pessoas')">${p.b}</button>
-      <button class="opcao" onclick="responder('numeros')">${p.c}</button>
-    </div>
-  `;
-  document.getElementById("progresso").style.width =
-    ((i / perguntas.length) * 100) + "%";
-}
+    function mostrarPergunta() {
+      const pergunta = perguntas[perguntaAtual];
 
-function responder(tipo) {
-  pontos[tipo]++;
-  i++;
-  if (i < perguntas.length) {
-    mostrar();
-  } else {
-    resultado();
-  }
-}
+      app.innerHTML = <h1>${pergunta.texto}</h1>;
 
-function resultado() {
-  const cursos = {
-    criatividade: [
-      "Publicidade e Propaganda",
-      "Design Gráfico",
-      "Cinema e Audiovisual",
-      "Arquitetura",
-      "Marketing",
-      "Produção Cultural"
-    ],
-    pessoas: [
-      "Psicologia",
-      "Pedagogia",
-      "Serviço Social",
-      "Enfermagem",
-      "Educação Física",
-      "Teologia"
-    ],
-    numeros: [
-      "Engenharia",
-      "Ciência da Computação",
-      "Sistemas de Informação",
-      "Administração",
-      "Contabilidade",
-      "Economia"
-    ]
-  };
+      pergunta.opcoes.forEach(opcao => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.innerText = opcao.texto;
+        btn.onclick = () => {
+          pontos[opcao.tipo]++;
+          proximaPergunta();
+        };
+        app.appendChild(btn);
+      });
+    }
 
-  let perfil = Object.keys(pontos).reduce((a, b) =>
-    pontos[a] > pontos[b] ? a : b
-  );
+    function proximaPergunta() {
+      perguntaAtual++;
+      if (perguntaAtual < perguntas.length) {
+        mostrarPergunta();
+      } else {
+        mostrarResultado();
+      }
+    }
 
-  document.getElementById("area").innerHTML = `
-    <div class="resultado">
-      <h2>Áreas indicadas para você</h2>
-      <ul>${cursos[perfil].map(c => <li>${c}</li>).join("")}</ul>
-      <button onclick="iniciar()">Refazer teste</button>
-    </div>
-  `;
+    function mostrarResultado() {
+      let maiorPerfil = Object.keys(pontos).reduce((a, b) =>
+        pontos[a] > pontos[b] ? a : b
+      );
 
-  document.getElementById("progresso").style.width = "100%";
-}
+      let cursos = {
+        social: ["Serviço Social", "Pedagogia", "Direito"],
+        exatas: ["Engenharia", "Ciência da Computação", "Sistemas de Informação"],
+        criativo: ["Publicidade", "Design", "Cinema"],
+        saude: ["Enfermagem", "Fisioterapia", "Psicologia"]
+      };
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+      app.innerHTML = `
+        <h1>Seu perfil</h1>
+        <p>Áreas indicadas para você:</p>
+        <p><strong>${cursos[maiorPerfil].join(", ")}</strong></p>
+        <button onclick="telaInicial()">Refazer teste</button>
+      `;
+    }
 
-  const area = document.getElementById("area");
-
-  area.innerHTML = `
-    <button onclick="iniciar()">Começar teste</button>
-  `;
-
-});
-</script>
+    telaInicial();
+  </script>
 
 </body>
 </html>
