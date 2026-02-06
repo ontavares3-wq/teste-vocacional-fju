@@ -7,20 +7,20 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0f0f;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #0b0b0b, #1c1c1c);
   color: #fff;
 }
 
 .container {
   max-width: 700px;
-  margin: auto;
+  margin: 0 auto;
   padding: 30px;
   text-align: center;
 }
 
 .logo img {
-  width: 140px;
+  width: 180px;
   margin-bottom: 20px;
 }
 
@@ -28,32 +28,30 @@ h1 {
   color: #ff2d2d;
 }
 
-button {
-  background: #ff2d2d;
-  color: white;
-  border: none;
-  padding: 15px;
-  width: 100%;
-  font-size: 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-top: 15px;
-}
-
-button:hover {
+p {
+  font-size: 18px;
   opacity: 0.9;
 }
 
-.opcao {
-  background: #1c1c1c;
-  padding: 12px;
-  border-radius: 8px;
-  margin: 10px 0;
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 12px;
+  background: #ff2d2d;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-.opcao:hover {
-  background: #2a2a2a;
+button:hover {
+  background: #e60000;
+}
+
+#quiz {
+  margin-top: 30px;
 }
 
 .hidden {
@@ -68,50 +66,25 @@ button:hover {
 
   <div id="inicio">
     <div class="logo">
+      <!-- coloque sua imagem dentro da pasta do projeto -->
       <img src="logo.png" alt="FJU Universitários">
     </div>
+
     <h1>Teste Vocacional</h1>
-    <p>Não é rótulo. É direção.</p>
+    <p>Descubra cursos universitários que combinam com você.<br>
+    Não é rótulo, é orientação.</p>
+
     <button onclick="iniciarTeste()">Começar teste</button>
   </div>
 
   <div id="quiz" class="hidden"></div>
 
-  <div id="resultado" class="hidden"></div>
-
 </div>
+
 <script>
-const questions = [
-  {
-    question: "Quando você está em um grupo, o que mais combina com você?",
-    options: [
-      { text: "Assumir a liderança e organizar tudo", profile: "lideranca" },
-      { text: "Ajudar as pessoas a se sentirem bem", profile: "social" },
-      { text: "Observar tudo antes de agir", profile: "analitico" }
-    ]
-  },
-  {
-    question: "Qual atividade te anima mais?",
-    options: [
-      { text: "Criar algo novo (arte, ideias, conteúdo)", profile: "criativo" },
-      { text: "Resolver problemas e desafios", profile: "analitico" },
-      { text: "Colocar a mão na massa", profile: "pratico" }
-    ]
-  },
-  {
-    question: "Na escola ou trabalho, você se destaca mais por:",
-    options: [
-      { text: "Comunicação e trabalho em equipe", profile: "social" },
-      { text: "Criatividade e inovação", profile: "criativo" },
-      { text: "Organização e estratégia", profile: "lideranca" }
-    ]
-  }
-  // depois você pode adicionar as outras perguntas aqui
-];
+let perguntaAtual = 0;
 
-let current = 0;
-
-let score = {
+const pontos = {
   lideranca: 0,
   criativo: 0,
   analitico: 0,
@@ -120,6 +93,54 @@ let score = {
   tecnologico: 0
 };
 
+const perguntas = [
+  {
+    texto: "Em um grupo, você prefere:",
+    opcoes: [
+      { texto: "Liderar e organizar", tipo: "lideranca" },
+      { texto: "Criar ideias e soluções", tipo: "criativo" },
+      { texto: "Analisar tudo antes de agir", tipo: "analitico" }
+    ]
+  },
+  {
+    texto: "Qual atividade mais te anima?",
+    opcoes: [
+      { texto: "Ajudar pessoas", tipo: "social" },
+      { texto: "Resolver problemas", tipo: "analitico" },
+      { texto: "Trabalhar com tecnologia", tipo: "tecnologico" }
+    ]
+  },
+  {
+    texto: "Você aprende melhor quando:",
+    opcoes: [
+      { texto: "Coloca a mão na massa", tipo: "pratico" },
+      { texto: "Pesquisa e estuda", tipo: "analitico" },
+      { texto: "Cria algo novo", tipo: "criativo" }
+    ]
+  },
+  {
+    texto: "Qual dessas áreas te chama mais atenção?",
+    opcoes: [
+      { texto: "Negócios e gestão", tipo: "lideranca" },
+      { texto: "Tecnologia e inovação", tipo: "tecnologico" },
+      { texto: "Comunicação e expressão", tipo: "criativo" }
+    ]
+  },
+  {
+    texto: "Você se sente melhor quando:",
+    opcoes: [
+      { texto: "Ajuda alguém diretamente", tipo: "social" },
+      { texto: "Conclui uma tarefa prática", tipo: "pratico" },
+      { texto: "Resolve algo complexo", tipo: "analitico" }
+    ]
+  }
+];
+
+// duplicação simples para fechar 15 perguntas
+while (perguntas.length < 15) {
+  perguntas.push(...perguntas.slice(0, 5));
+}
+
 function iniciarTeste() {
   document.getElementById("inicio").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
@@ -128,138 +149,49 @@ function iniciarTeste() {
 
 function mostrarPergunta() {
   const quiz = document.getElementById("quiz");
-  const q = questions[current];
 
-  let html = `
-    <h2>Pergunta ${current + 1} de ${questions.length}</h2>
-    <p>${q.question}</p>
-  `;
-
-  q.options.forEach(opt => {
-    html += `
-      <div class="opcao" onclick="responder('${opt.profile}')">
-        ${opt.text}
-      </div>
-    `;
-  });
-
-  if (current > 0) {
-    html += `<button onclick="voltar()">Voltar</button>`;
-  }
-
-  quiz.innerHTML = html;
-}
-
-function responder(profile) {
-  score[profile]++;
-  current++;
-
-  if (current < questions.length) {
-    mostrarPergunta();
-  } else {
+  if (perguntaAtual >= perguntas.length) {
     mostrarResultado();
+    return;
   }
-}
 
-function voltar() {
-  if (current > 0) {
-    current--;
-    mostrarPergunta();
-  }
-}
-
-function mostrarResultado() {
-  document.getElementById("quiz").classList.add("hidden");
-  const r = document.getElementById("resultado");
-  r.classList.remove("hidden");
-
-  r.innerHTML = `
-    <h2>Resultado do Teste</h2>
-    <p>Com base nas suas respostas, essas áreas combinam com você:</p>
-
-    <ul>
-      <li><strong>Liderança:</strong> Administração, Gestão Pública, Marketing</li>
-      <li><strong>Criativo:</strong> Publicidade, Design, Arquitetura</li>
-      <li><strong>Analítico:</strong> Engenharia, Economia, Ciência de Dados</li>
-      <li><strong>Social:</strong> Psicologia, Pedagogia, Serviço Social</li>
-      <li><strong>Prático:</strong> Educação Física, Logística, Tecnólogos</li>
-      <li><strong>Tecnológico:</strong> TI, Sistemas de Informação, ADS</li>
-    </ul>
-
-    <button onclick="location.reload()">Refazer teste</button>
-  `;
-}
-</script>
-
-let indice = 0;
-let pontuacao = {
-  exatas: 0,
-  humanas: 0,
-  saude: 0,
-  social: 0,
-  criativo: 0,
-  negocios: 0
-};
-
-function iniciarTeste() {
-  document.getElementById("inicio").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-  mostrarPergunta();
-}
-
-function mostrarPergunta() {
-  const quiz = document.getElementById("quiz");
-  const p = perguntas[indice];
+  const p = perguntas[perguntaAtual];
 
   quiz.innerHTML = `
-    <h2>Pergunta ${indice + 1} de ${perguntas.length}</h2>
-    <p>${p.texto}</p>
-
-    <div class="opcao" onclick="responder('${p.tipo}')">Concordo</div>
-    <div class="opcao" onclick="proxima()">Prefiro não responder</div>
-
-    ${indice > 0 ? '<button onclick="voltar()">Voltar</button>' : ''}
+    <h2>${p.texto}</h2>
+    ${p.opcoes.map(op =>
+      `<button onclick="responder('${op.tipo}')">${op.texto}</button>`
+    ).join("")}
+    <p>${perguntaAtual + 1} de ${perguntas.length}</p>
   `;
 }
 
 function responder(tipo) {
-  if (pontuacao[tipo] !== undefined) {
-    pontuacao[tipo]++;
-  }
-  proxima();
-}
-
-function proxima() {
-  indice++;
-  if (indice < perguntas.length) {
-    mostrarPergunta();
-  } else {
-    mostrarResultado();
-  }
-}
-
-function voltar() {
-  if (indice > 0) {
-    indice--;
-    mostrarPergunta();
-  }
+  pontos[tipo]++;
+  perguntaAtual++;
+  mostrarPergunta();
 }
 
 function mostrarResultado() {
-  document.getElementById("quiz").classList.add("hidden");
-  const r = document.getElementById("resultado");
-  r.classList.remove("hidden");
+  const quiz = document.getElementById("quiz");
 
-  r.innerHTML = `
-    <h2>Áreas que combinam com você</h2>
-    <ul>
-      <li>Exatas: Engenharia, TI, Ciência da Computação</li>
-      <li>Humanas: Direito, História, Serviço Social</li>
-      <li>Saúde: Enfermagem, Psicologia, Educação Física</li>
-      <li>Social: Pedagogia, Comunicação, Administração</li>
-      <li>Criativo: Design, Publicidade, Artes Visuais</li>
-      <li>Negócios: Administração, Economia, Contabilidade</li>
-    </ul>
+  const cursos = {
+    lideranca: "Administração, Gestão Pública, Marketing",
+    criativo: "Publicidade, Design, Arquitetura",
+    analitico: "Engenharia, Economia, Ciência de Dados",
+    social: "Psicologia, Pedagogia, Serviço Social",
+    pratico: "Educação Física, Logística, Tecnólogos",
+    tecnologico: "TI, Sistemas de Informação, ADS"
+  };
+
+  const ordenado = Object.entries(pontos)
+    .sort((a, b) => b[1] - a[1]);
+
+  quiz.innerHTML = `
+    <h2>Resultado do Teste</h2>
+    ${ordenado.map(r =>
+      `<p><strong>${r[0]}:</strong> ${cursos[r[0]]}</p>`
+    ).join("")}
     <button onclick="location.reload()">Refazer teste</button>
   `;
 }
