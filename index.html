@@ -137,6 +137,11 @@ function mostrarResultado(){
  document.getElementById("listaCursos").innerHTML =
    cursos[area].map(c=><p>🎓 ${c}</p>).join("");
 }
+<script>
+function iniciarTeste(){
+  document.getElementById("inicio").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+}
 </script>
 
 </body>
