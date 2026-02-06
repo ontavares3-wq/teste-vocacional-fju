@@ -201,8 +201,16 @@ function resultado() {
   document.getElementById("progresso").style.width = "100%";
 }
 
-document.getElementById("area").innerHTML =
-  <button onclick="iniciar()">Começar teste</button>;
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const area = document.getElementById("area");
+
+  area.innerHTML = `
+    <button onclick="iniciar()">Começar teste</button>
+  `;
+
+});
 </script>
 
 </body>
