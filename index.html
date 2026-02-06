@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Teste Vocacional | FJU Universitários</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Ícones -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(180deg, #0b0b0b, #1a1a1a);
+  color: #fff;
+}
+
+/* HEADER */
+header {
+  background: #000;
+  padding: 25px;
+  text-align: center;
+  border-bottom: 2px solid #ff2d2d;
+}
+
+header img {
+  max-width: 170px;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #ff2d2d;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  opacity: .85;
+  margin-bottom: 35px;
+}
+
+/* QUESTIONS */
+.question {
+  background: #222;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 18px;
+  transition: transform .2s;
+}
+
+.question:hover {
+  transform: scale(1.01);
+}
+
+.question p {
+  margin-bottom: 12px;
+}
+
+label {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 18px;
+  font-size: 18px;
+  background: #ff2d2d;
+  border: none;
+  color: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 25px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* RESULT */
+.result {
+  margin-top: 40px;
+  background: #111;
+  padding: 30px;
+  border-radius: 18px;
+  animation: fade .6s;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result h2 {
+  color: #ff2d2d;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  opacity: .6;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="logo.png" alt="FJU Universitários">
+</header>
+
+<div class="container">
+
+<h1>Teste Vocacional</h1>
+<p class="subtitle">
+Descubra áreas que combinam com você.  
+<br>Não é rótulo, é direção <i class="fa-solid fa-rocket"></i>
+</p>
+
+<form id="quiz"></form>
+
+<button type="button" onclick="calcular()">
+  <i class="fa-solid fa-magnifying-glass"></i> Ver meu perfil
+</button>
+
+<div id="resultado" class="result"></div>
+
+</div>
+
+<footer>
+  © FJU Universitários • Teste Vocacional
+</footer>
+
+<script>
+const perguntas = [
+["Você gosta de resolver problemas e desafios?", "exatas"],
+["Você se importa em ajudar pessoas diretamente?", "saude"],
+["Você se comunica bem com diferentes tipos de pessoas?", "comunicacao"],
+["Tecnologia e inovação te chamam atenção?", "tecnologia"],
+["Você gosta de liderar ou organizar equipes?", "gestao"],
+["Você curte debates, leitura e reflexão?", "humanas"],
+["Você se dá bem com números?", "exatas"],
+["Você se imagina trabalhando na área da saúde?", "saude"],
+["Você gosta de redes sociais e mídia?", "comunicacao"],
+["Você se interessa por computadores e sistemas?", "tecnologia"],
+["Você pensa em empreender ou administrar algo?", "gestao"],
+["Você se preocupa com questões sociais?", "humanas"],
+["Você prefere lógica a emoção?", "exatas"],
+["Você tem empatia com o sofrimento das pessoas?", "saude"],
+["Você gosta de falar em público?", "comunicacao"]
+];
+
+const form = document.getElementById("quiz");
+
+perguntas.forEach((p,i)=>{
+  form.innerHTML += `
+    <div class="question">
+      <p>${i+1}. ${p[0]}</p>
+      <label>
+        <input type="radio" name="q${i}" value="${p[1]}" required> Sim
+      </label>
+      <label>
+        <input type="radio" name="q${i}" value=""> Não
+      </label>
+    </div>
+  `;
+});
+
+function calcular(){
+  let perfil = {
+    exatas:0, humanas:0, saude:0,
+    comunicacao:0, gestao:0, tecnologia:0
+  };
+
+  const data = new FormData(form);
+  for (let v of data.values()) {
+    if(v) perfil[v]++;
+  }
+
+  let ranking = Object.entries(perfil).sort((a,b)=>b[1]-a[1]);
+
+  const cursos = {
+    exatas:["Engenharia","Arquitetura","Matemática","Estatística"],
+    humanas:["Direito","Pedagogia","Serviço Social","História"],
+    saude:["Enfermagem","Psicologia","Fisioterapia","Medicina"],
+    comunicacao:["Marketing","Publicidade","Jornalismo","Relações Públicas"],
+    gestao:["Administração","Economia","Contabilidade","Gestão de RH"],
+    tecnologia:["ADS","Sistemas de Informação","Ciência da Computação"]
+  };
+
+  let html = <h2><i class="fa-solid fa-user-check"></i> Seu perfil combina mais com:</h2>;
+
+  ranking.slice(0,3).forEach(r=>{
+    html += <p><strong>${r[0].toUpperCase()}</strong>: ${cursos[r[0]].join(", ")}</p>;
+  });
+
+  html += `
+    <p style="margin-top:20px;opacity:.85">
+    Esse teste é apenas uma orientação vocacional.  
+    Busque conhecimento, se conheça e coloque Deus à frente das suas decisões.
+    </p>
+  `;
+
+  document.getElementById("resultado").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
