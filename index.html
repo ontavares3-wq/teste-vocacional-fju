@@ -2,51 +2,85 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Teste Vocacional | FJU Universitários</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:#0f0f0f;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: radial-gradient(circle at top, #1a1a1a, #000);
+  color: #fff;
 }
-.container{
-  width:100%;
-  max-width:420px;
-  background:#121212;
-  border-radius:18px;
-  padding:24px;
-  text-align:center;
-  box-shadow:0 0 30px rgba(255,0,0,.3);
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 50px 25px;
+  text-align: center;
 }
-.logo img{max-width:140px;margin-bottom:15px;}
-h1,h2{color:#ff2d2d;}
-button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:10px;
-  background:#ff2d2d;
-  color:#fff;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:15px;
+
+.logo {
+  width: 150px;
+  margin-bottom: 25px;
 }
-.opcao{
-  background:#1f1f1f;
-  margin-top:10px;
-  padding:12px;
-  border-radius:10px;
-  cursor:pointer;
+
+h1 {
+  color: #ff1e1e;
+  font-size: 32px;
+  margin-bottom: 10px;
 }
-.hidden{display:none;}
+
+p {
+  font-size: 17px;
+  opacity: 0.9;
+}
+
+button {
+  background: #ff1e1e;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 35px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.pergunta {
+  margin-top: 35px;
+}
+
+.opcao {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+}
+
+.barra {
+  height: 6px;
+  background: #333;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.progresso {
+  height: 100%;
+  width: 0%;
+  background: #ff1e1e;
+  transition: width 0.3s;
+}
+
+.resultado ul {
+  text-align: left;
+  max-width: 400px;
+  margin: 15px auto;
+}
 </style>
 </head>
 
@@ -54,94 +88,121 @@ button{
 
 <div class="container">
 
-<div id="inicio">
-  <div class="logo">
-    <img src="logo.png" alt="FJU Universitários">
-  </div>
+  <img src="logo.png" class="logo" alt="FJU Universitários">
+
   <h1>Teste Vocacional</h1>
-  <p>Descubra cursos que combinam com você 🎓</p>
-  <button onclick="iniciarTeste()">Começar teste</button>
-</div>
+  <p id="descricao">Descubra cursos que combinam com você, não é rótulo e sim orientação!</p>
 
-<div id="quiz" class="hidden">
-  <h2 id="pergunta"></h2>
-  <div id="opcoes"></div>
-</div>
+  <div class="barra">
+    <div class="progresso" id="progresso"></div>
+  </div>
 
-<div id="resultado" class="hidden">
-  <h2>Cursos indicados:</h2>
-  <div id="listaCursos"></div>
-  <button onclick="location.reload()">Refazer teste</button>
-</div>
+  <div id="area"></div>
 
 </div>
 
 <script>
 const perguntas = [
- {q:"O que você mais gosta de fazer?",a:[["Criar","Criativo"],["Ajudar","Social"],["Organizar","Gestao"]]},
- {q:"Prefere trabalhar:",a:[["Com pessoas","Social"],["Com números","Gestao"],["Com ideias","Criativo"]]},
- {q:"Você se destaca em:",a:[["Comunicação","Social"],["Planejamento","Gestao"],["Imaginação","Criativo"]]},
- {q:"Seu ambiente ideal é:",a:[["Comunidade","Social"],["Empresa","Gestao"],["Estúdio","Criativo"]]},
- {q:"Você gosta mais de:",a:[["Ensinar","Social"],["Liderar","Gestao"],["Criar","Criativo"]]},
- {q:"O que mais te motiva?",a:[["Impacto social","Social"],["Resultados","Gestao"],["Inovação","Criativo"]]},
- {q:"Você prefere:",a:[["Grupo","Social"],["Decidir","Gestao"],["Criar sozinho","Criativo"]]},
- {q:"Seu ponto forte:",a:[["Empatia","Social"],["Organização","Gestao"],["Criatividade","Criativo"]]},
- {q:"Você se vê no futuro:",a:[["Ajudando pessoas","Social"],["Gerenciando","Gestao"],["Criando projetos","Criativo"]]},
- {q:"O que te atrai mais?",a:[["Psicologia","Social"],["Administração","Gestao"],["Design","Criativo"]]},
- {q:"Você resolve problemas com:",a:[["Diálogo","Social"],["Estratégia","Gestao"],["Ideias","Criativo"]]},
- {q:"Trabalhar sob pressão:",a:[["Consigo","Gestao"],["Prefiro diálogo","Social"],["Depende","Criativo"]]},
- {q:"Matéria favorita:",a:[["Português","Social"],["Matemática","Gestao"],["Artes","Criativo"]]},
- {q:"Você prefere rotina ou novidade?",a:[["Rotina","Gestao"],["Novidade","Criativo"],["Pessoas","Social"]]},
- {q:"Maior satisfação:",a:[["Ver alguém bem","Social"],["Bater metas","Gestao"],["Criar algo","Criativo"]]}
+  { t: "O que mais te atrai em um trabalho?", a: "criatividade", b: "pessoas", c: "números" },
+  { t: "Você prefere resolver problemas:", a: "de forma criativa", b: "com diálogo", c: "com lógica" },
+  { t: "Qual ambiente você prefere?", a: "artístico", b: "social", c: "técnico" },
+  { t: "O que você mais valoriza?", a: "expressão", b: "impacto social", c: "resultado" },
+  { t: "Você se destaca mais em:", a: "ideias", b: "comunicação", c: "organização" },
+  { t: "Seu ponto forte é:", a: "imaginação", b: "empatia", c: "análise" },
+  { t: "Você prefere trabalhar:", a: "criando", b: "orientando", c: "planejando" },
+  { t: "Qual tarefa te anima mais?", a: "inventar", b: "ajudar", c: "estruturar" },
+  { t: "Você se vê no futuro:", a: "criando conteúdo", b: "cuidando de pessoas", c: "gerenciando sistemas" },
+  { t: "Você aprende melhor:", a: "visualizando", b: "conversando", c: "calculando" },
+  { t: "Seu estilo é mais:", a: "inovador", b: "humano", c: "estratégico" },
+  { t: "Você prefere projetos:", a: "livres", b: "coletivos", c: "controlados" },
+  { t: "Você lida melhor com:", a: "ideias", b: "emoções", c: "dados" },
+  { t: "Seu interesse maior é:", a: "arte e mídia", b: "sociedade", c: "tecnologia" },
+  { t: "Você se realiza quando:", a: "cria algo novo", b: "ajuda alguém", c: "resolve algo complexo" }
 ];
 
-const cursos={
- Social:["Psicologia","Pedagogia","Serviço Social","Enfermagem"],
- Gestao:["Administração","Marketing","Economia","Gestão RH"],
- Criativo:["Design","Publicidade","Arquitetura","Cinema"]
+let i = 0;
+let pontos = {
+  criatividade: 0,
+  pessoas: 0,
+  numeros: 0
 };
 
-let atual=0;
-let pontos={Social:0,Gestao:0,Criativo:0};
-
-function iniciarTeste(){
- document.getElementById("inicio").classList.add("hidden");
- document.getElementById("quiz").classList.remove("hidden");
- mostrarPergunta();
+function iniciar() {
+  i = 0;
+  pontos = { criatividade: 0, pessoas: 0, numeros: 0 };
+  document.getElementById("descricao").style.display = "none";
+  mostrar();
 }
 
-function mostrarPergunta(){
- const p=perguntas[atual];
- document.getElementById("pergunta").innerText=p.q;
- const op=document.getElementById("opcoes");
- op.innerHTML="";
- p.a.forEach(o=>{
-   const d=document.createElement("div");
-   d.className="opcao";
-   d.innerText=o[0];
-   d.onclick=()=>responder(o[1]);
-   op.appendChild(d);
- });
+function mostrar() {
+  const p = perguntas[i];
+  document.getElementById("area").innerHTML = `
+    <div class="pergunta">
+      <h3>${p.t}</h3>
+      <button class="opcao" onclick="responder('criatividade')">${p.a}</button>
+      <button class="opcao" onclick="responder('pessoas')">${p.b}</button>
+      <button class="opcao" onclick="responder('numeros')">${p.c}</button>
+    </div>
+  `;
+  document.getElementById("progresso").style.width =
+    ((i / perguntas.length) * 100) + "%";
 }
 
-function responder(tipo){
- pontos[tipo]++;
- atual++;
- atual<perguntas.length ? mostrarPergunta() : mostrarResultado();
+function responder(tipo) {
+  pontos[tipo]++;
+  i++;
+  if (i < perguntas.length) {
+    mostrar();
+  } else {
+    resultado();
+  }
 }
 
-function mostrarResultado(){
- document.getElementById("quiz").classList.add("hidden");
- document.getElementById("resultado").classList.remove("hidden");
- const area=Object.keys(pontos).reduce((a,b)=>pontos[a]>pontos[b]?a:b);
- document.getElementById("listaCursos").innerHTML =
-   cursos[area].map(c=><p>🎓 ${c}</p>).join("");
+function resultado() {
+  const cursos = {
+    criatividade: [
+      "Publicidade e Propaganda",
+      "Design Gráfico",
+      "Cinema e Audiovisual",
+      "Arquitetura",
+      "Marketing",
+      "Produção Cultural"
+    ],
+    pessoas: [
+      "Psicologia",
+      "Pedagogia",
+      "Serviço Social",
+      "Enfermagem",
+      "Educação Física",
+      "Teologia"
+    ],
+    numeros: [
+      "Engenharia",
+      "Ciência da Computação",
+      "Sistemas de Informação",
+      "Administração",
+      "Contabilidade",
+      "Economia"
+    ]
+  };
+
+  let perfil = Object.keys(pontos).reduce((a, b) =>
+    pontos[a] > pontos[b] ? a : b
+  );
+
+  document.getElementById("area").innerHTML = `
+    <div class="resultado">
+      <h2>Áreas indicadas para você</h2>
+      <ul>${cursos[perfil].map(c => <li>${c}</li>).join("")}</ul>
+      <button onclick="iniciar()">Refazer teste</button>
+    </div>
+  `;
+
+  document.getElementById("progresso").style.width = "100%";
 }
-<script>
-function iniciarTeste(){
-  document.getElementById("inicio").classList.add("hidden");
-  document.getElementById("quiz").classList.remove("hidden");
-}
+
+document.getElementById("area").innerHTML =
+  <button onclick="iniciar()">Começar teste</button>;
 </script>
 
 </body>
